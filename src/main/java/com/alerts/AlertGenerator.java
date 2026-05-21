@@ -1,11 +1,11 @@
 package com.alerts;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.data_management.DataStorage;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The {@code AlertGenerator} class is responsible for monitoring patient data
@@ -66,11 +66,11 @@ public class AlertGenerator {
     private void checkCriticalThresholds(String patientId, PatientRecord record) {
         if (record.getRecordType().equals("SystolicBloodPressure")) {
             if (record.getMeasurementValue() > 180 || record.getMeasurementValue() < 90) {
-                triggerAlert(new Alert(patientId, "Critical Systolic BP", record.getTimestamp()));
+                triggerAlert(new ManualAlert(patientId, "Critical Systolic BP", record.getTimestamp()));
             }
         } else if (record.getRecordType().equals("DiastolicBloodPressure")) {
             if (record.getMeasurementValue() > 120 || record.getMeasurementValue() < 60) {
-                triggerAlert(new Alert(patientId, "Critical Diastolic BP", record.getTimestamp()));
+                triggerAlert(new ManualAlert(patientId, "Critical Diastolic BP", record.getTimestamp()));
             }
         }
     }
@@ -91,11 +91,11 @@ public class AlertGenerator {
 
             // Check increasing trend
             if ((r2 - r1 > 10) && (r3 - r2 > 10)) {
-                triggerAlert(new Alert(patientId, bpType + " Increasing Trend", bpRecords.get(i).getTimestamp()));
+                triggerAlert(new ManualAlert(patientId, bpType + " Increasing Trend", bpRecords.get(i).getTimestamp()));
             }
             // Check decreasing trend
             if ((r1 - r2 > 10) && (r2 - r3 > 10)) {
-                triggerAlert(new Alert(patientId, bpType + " Decreasing Trend", bpRecords.get(i).getTimestamp()));
+                triggerAlert(new ManualAlert(patientId, bpType + " Decreasing Trend", bpRecords.get(i).getTimestamp()));
             }
         }
     }
@@ -105,7 +105,7 @@ public class AlertGenerator {
      */
     private void checkLowSaturation(String patientId, PatientRecord record) {
         if (record.getRecordType().equals("Saturation") && record.getMeasurementValue() < 92) {
-            triggerAlert(new Alert(patientId, "Low Oxygen Saturation", record.getTimestamp()));
+            triggerAlert(new ManualAlert(patientId, "Low Oxygen Saturation", record.getTimestamp()));
         }
     }
 
@@ -127,7 +127,7 @@ public class AlertGenerator {
             if (previous.getTimestamp() < tenMinutesAgo) break;
 
             if (previous.getMeasurementValue() - current.getMeasurementValue() >= 5) {
-                triggerAlert(new Alert(patientId, "Rapid Saturation Drop", current.getTimestamp()));
+                triggerAlert(new ManualAlert(patientId, "Rapid Saturation Drop", current.getTimestamp()));
                 break; // Alert once for the drop in this window
             }
         }
@@ -152,11 +152,11 @@ public class AlertGenerator {
         for (PatientRecord nearbyRecord : records) {
             if (Math.abs(nearbyRecord.getTimestamp() - current.getTimestamp()) <= oneMinuteWindow) {
                 if (isLowSys && nearbyRecord.getRecordType().equals("Saturation") && nearbyRecord.getMeasurementValue() < 92) {
-                    triggerAlert(new Alert(patientId, "Hypotensive Hypoxemia", current.getTimestamp()));
+                    triggerAlert(new ManualAlert(patientId, "Hypotensive Hypoxemia", current.getTimestamp()));
                     return;
                 }
                 if (isLowSat && nearbyRecord.getRecordType().equals("SystolicBloodPressure") && nearbyRecord.getMeasurementValue() < 90) {
-                    triggerAlert(new Alert(patientId, "Hypotensive Hypoxemia", current.getTimestamp()));
+                    triggerAlert(new ManualAlert(patientId, "Hypotensive Hypoxemia", current.getTimestamp()));
                     return;
                 }
             }
@@ -187,7 +187,7 @@ public class AlertGenerator {
             double average = sum / windowSize;
             // Define "abnormal peak" as 20% higher than the recent average
             if (current.getMeasurementValue() > average * 1.20) {
-                triggerAlert(new Alert(patientId, "Abnormal ECG Peak", current.getTimestamp()));
+                triggerAlert(new ManualAlert(patientId, "Abnormal ECG Peak", current.getTimestamp()));
             }
         }
     }
@@ -198,7 +198,7 @@ public class AlertGenerator {
      */
     private void checkManualAlert(String patientId, PatientRecord record) {
         if (record.getRecordType().equals("Alert")) {
-            triggerAlert(new Alert(patientId, "Manual Alert Triggered", record.getTimestamp()));
+            triggerAlert(new ManualAlert(patientId, "Manual Alert Triggered", record.getTimestamp()));
         }
     }
 

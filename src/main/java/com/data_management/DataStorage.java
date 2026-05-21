@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.alerts.AlertGenerator;
 
 /**
@@ -13,16 +14,26 @@ import com.alerts.AlertGenerator;
  * patient IDs.
  */
 public class DataStorage {
+    private static DataStorage instance; // Singleton instance
     private Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
 
     /**
      * Constructs a new instance of DataStorage, initializing the underlying storage
      * structure.
      */
-    public DataStorage() {
+    private DataStorage() { // Changed to private
         this.patientMap = new HashMap<>();
     }
 
+    /**
+     * Provides global access to the single instance of DataStorage.
+     */
+    public static DataStorage getInstance() {
+        if (instance == null) {
+            instance = new DataStorage();
+        }
+        return instance;
+    }
     /**
      * Adds or updates patient data in the storage.
      * If the patient does not exist, a new Patient object is created and added to
@@ -85,7 +96,7 @@ public class DataStorage {
     public static void main(String[] args) {
         // DataReader is not defined in this scope, should be initialized appropriately.
         // DataReader reader = new SomeDataReaderImplementation("path/to/data");
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
 
         // Assuming the reader has been properly initialized and can read data into the
         // storage

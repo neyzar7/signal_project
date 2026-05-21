@@ -1,16 +1,16 @@
 package data_management;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.alerts.AlertGenerator;
 import com.data_management.DataStorage;
 import com.data_management.Patient;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 class AlertGeneratorTest {
     private DataStorage storage;
@@ -22,7 +22,7 @@ class AlertGeneratorTest {
 
     @BeforeEach
     void setUp() {
-        storage = new DataStorage();
+        storage = DataStorage.getInstance();
         generator = new AlertGenerator(storage);
         System.setOut(new PrintStream(outContent)); // Redirect console output for testing
     }

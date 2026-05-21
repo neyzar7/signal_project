@@ -1,17 +1,19 @@
 package data_management;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
+
 import com.data_management.DataStorage;
 import com.data_management.PatientRecord;
-import java.util.List;
 
 class DataStorageTest {
 
     @Test
     void testAddAndGetRecords() {
         // Initialize storage directly
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         
         // Manually inject test data
         storage.addPatientData(1, 100.0, "WhiteBloodCells", 1714376789050L);

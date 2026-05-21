@@ -1,4 +1,4 @@
-package com.cardio_generator;
+package com.data_management;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,6 +31,19 @@ import com.cardio_generator.outputs.WebSocketOutputStrategy;
 
 
 public class HealthDataSimulator {
+
+    private static HealthDataSimulator instance; // Singleton instance
+
+    private HealthDataSimulator() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static HealthDataSimulator getInstance() {
+        if (instance == null) {
+            instance = new HealthDataSimulator();
+        }
+        return instance;
+    }
 
     private static int patientCount = 50; // Default number of patients
     private static ScheduledExecutorService scheduler;
