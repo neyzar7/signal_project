@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.alerts.AlertGenerator;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Manages storage and retrieval of patient data within a healthcare monitoring
  * system.
@@ -22,13 +24,13 @@ public class DataStorage {
      * structure.
      */
     private DataStorage() { // Changed to private
-        this.patientMap = new HashMap<>();
+        this.patientMap = new ConcurrentHashMap<>(); // Swapped Hasmap for ConcurrentHasMap to handle concurrent data integration
     }
 
     /**
      * Provides global access to the single instance of DataStorage.
      */
-    public static DataStorage getInstance() {
+    public static synchronized DataStorage getInstance() {
         if (instance == null) {
             instance = new DataStorage();
         }

@@ -35,6 +35,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- SLF4J Simple Logger to resolve NOP warning -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
